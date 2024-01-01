@@ -1,18 +1,20 @@
 #include <iostream>
 #include "Person.cpp"
+#include "linked-list\LinkedList.cpp"
+#include "linked-list\SortedLinkedList.cpp"
+#include "linked-list\UnsortedLinkedList.cpp"
 using namespace std;
 
 
 int main() 
 {
-    Person::initSpecialChars();
-    //cout << "InitSpecialChars finished\n" << endl;
-    //Person::initIdChars();
-    //Person* test = new Person();
+    UnsortedLinkedList* test = new UnsortedLinkedList();
+    Person* testPerson = new Person("Steve", 31);
+    test -> insert(*testPerson);
 
-    // cout << "Id equals: " << (*test).getId() << "\n" <<endl;
+    cout << test -> getHead() -> getData().getName();
+    delete test;
+    delete testPerson;
 
-    // delete test;
-
-    cout << "Hello World\n" << endl;
+    return 0;
 } //main

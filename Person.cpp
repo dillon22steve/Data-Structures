@@ -1,86 +1,48 @@
-#include <random>
 #include <iostream>
+#include <ctime>
 using namespace std;
 
 
-class Person {
+class Person
+{
 
-static char idCharacters[70];
-static char specialChars[8];
+const char idCharacters[70] = {
+    '!', '@', '#', '$', '%', '&', '*', '?',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+};
 
 private:
 
-    char* name;
+    std::string name;
     int age;
-    char id[25];
+    char id[26];
 
 public:
     Person() {
         age = 0;
+        name = "";
+        generateRandomId();
     }; //constructor
-    Person(char* newName, int newAge) {
+    Person(std::string newName, int newAge) {
         name = newName;
         age = newAge;
         generateRandomId();
     }; //constructor
 
 
-    //Initializes the array of special characters that will be added to the idCharacters array.
-    static void initSpecialChars() {
-        specialChars[0] = '!'; 
-        specialChars[1] = '@'; 
-        specialChars[2] = '#';
-        specialChars[3] = '$';
-        specialChars[4] = '%';
-        specialChars[5] = '&';
-        specialChars[6] = '*';
-        specialChars[7] = '?';
-    }; //initSpecialChars
-
-
-    //Initializes the array of characters that will be randomly selected from to generate
-    //the person object's unique id.
-    static void initIdChars() {
-        //adds the numbers 1 through 9 to the character array.
-        for (int i = 0; i < 9; i++) {
-            idCharacters[i] = i;
-        }; //for
-
-        int index = 9;
-        char initialChar = 'a';
-
-        //Adds the lowercase letters to the character array.
-        for (int i = 0; i < 26; i++) {
-            char charToAdd = initialChar + i;
-            idCharacters[index] = charToAdd;
-            index++;
-        }; //for
-
-        initialChar = 'A';
-        //Adds the uppercase letters to the character array.
-        for (int i = 0; i < 26; i++) {
-            char charToAdd = initialChar + i;
-            idCharacters[index] = charToAdd;
-            index++;
-        }; //for
-
-        //Adds the special characters to the overall character array.
-        // for (int i = 0; i < 9; i++) {
-        //     char charToAdd = specialChars[i];
-        //     idCharacters[index] = charToAdd;
-        //     index++;
-        // }; //for
-    }; //initIdChars
-
-
-
 
     void generateRandomId() {
+        srand(time(NULL));
         int range = 70;
         for (int i = 0; i < 25; i++) {
             int randIndex = (rand() % range);
             id[i] = idCharacters[randIndex];
         }; //for
+        id[25] = '\0';
     }; //generateRandomId
 
 
@@ -97,10 +59,23 @@ public:
 
 
 
-    void setName(char* newName) {
+    int compareTo(Person otherPerson) {
+        int thisSum = 0;
+        int otherSum = 0;
+        for (int i = 0; i < 25; i++) {
+            thisSum = thisSum + id[i];
+            otherSum = otherSum + otherPerson.id[i];
+        }; //for
+
+        return (thisSum - otherSum);
+    }; //compareTo
+
+
+
+    void setName(string newName) {
         name = newName;
     }; //setName
-    char* getName() {
+    string getName() {
         return name;
     }; //getName
 

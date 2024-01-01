@@ -8,6 +8,9 @@ private:
 public:
     Node* getBack() {
         return back;
-    };
+    }; //getBack
+    void setBack(Node* newBack) {
+        back = newBack;
+    }; //setBack
 
-};
+}; //DoublyLinkedNode
