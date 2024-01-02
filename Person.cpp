@@ -1,5 +1,4 @@
 #include <iostream>
-#include <ctime>
 using namespace std;
 
 
@@ -22,11 +21,6 @@ private:
     char id[26];
 
 public:
-    Person() {
-        age = 0;
-        name = "";
-        generateRandomId();
-    }; //constructor
     Person(std::string newName, int newAge) {
         name = newName;
         age = newAge;
@@ -36,7 +30,6 @@ public:
 
 
     void generateRandomId() {
-        srand(time(NULL));
         int range = 70;
         for (int i = 0; i < 25; i++) {
             int randIndex = (rand() % range);
@@ -60,6 +53,14 @@ public:
 
 
     int compareTo(Person otherPerson) {
+        int compare = name.compare(otherPerson.name);
+        if (compare == 0) {
+            return compareIds(otherPerson);
+        } else {
+            return compare;
+        } //if
+    }; //compareTo
+    int compareIds(Person otherPerson) {
         int thisSum = 0;
         int otherSum = 0;
         for (int i = 0; i < 25; i++) {
@@ -68,7 +69,7 @@ public:
         }; //for
 
         return (thisSum - otherSum);
-    }; //compareTo
+    } //compareIds
 
 
 

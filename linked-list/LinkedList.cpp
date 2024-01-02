@@ -14,30 +14,28 @@ public:
 
 
     void remove(Person personToDelete) {
-        if (head == nullptr) {
+        if (isEmpty()) {
             return;
         } else if ((head -> getData()).equals(personToDelete)) {
             Node* tempPtr = head -> getNext();
             delete head;
             head = tempPtr;
-            delete tempPtr;
         } else {
             Node* temp = head;
-            while (temp -> getNext() != nullptr) {
+            Node* next =  temp -> getNext();
+            while (next != nullptr) {
                 //if temp's nextPtr contains the person that we want to delete, then link temp
                 //with temp's next next node and delete the original next node.
-                if (personToDelete.compareTo((temp -> getNext()) -> getData())) {
-                    temp -> setNext((temp -> getNext()) -> getNext());
-                    delete (temp -> getNext());
-                    delete temp;
+                bool equal = personToDelete.equals(next -> getData());
+                if (equal) {
+                    temp -> setNext(next -> getNext());
+                    delete next;
                     return;
                 } else {
                     temp = temp -> getNext();
+                    next = next -> getNext();
                 }; //if
             }; //while
-
-            //if this line is reached, the person is not present in the list.
-            delete temp;
         }; //if
     }; //remove
 
@@ -47,12 +45,10 @@ public:
         Node* temp = head;
         while (temp != nullptr) {
             if ((temp -> getData()).equals(personToSearch)) {
-                delete temp;
                 return true;
             }; //if
         }; //while
 
-        delete temp;
         return false;
     }; //search
 
@@ -73,13 +69,12 @@ public:
             }; //while
 
             //If the method has reached this point, the data is not present in the list.
-            delete tempPtr;
             return nullptr;
         }; //if
     }; //get
 
     Node* get(int index) {
-        if (head == nullptr) {
+        if (isEmpty()) {
             return nullptr;
         } else {
             Node* temp = head;
@@ -88,7 +83,6 @@ public:
                 temp = temp -> getNext();
                 i = i + 1;
                 if (i > index) {
-                    delete temp;
                     return nullptr;
                 }; //if
             }; //while
@@ -108,12 +102,23 @@ public:
 
     void makeEmpty() {
         Node* temp;
-        while (temp != nullptr) {
+        while (head != NULL) {
             temp = head;
             head = head -> getNext();
             delete temp;
         }; //while
     }; //makeEmpty
+
+
+    void print() {
+        Node* temp = head;
+        while (temp != NULL) {
+            Person tempData = (*temp).getData();
+            cout << "Name: " << tempData.getName() << ", age: " << tempData.getAge() << ", id: " << tempData.getId() << "\n";
+
+            temp = (*temp).getNext();
+        }; //while
+    }; //print
 
 
 
@@ -122,3 +127,69 @@ public:
     }; //getHead
 
 }; //LinkedList
+
+
+
+
+
+
+class UnsortedLinkedList: public LinkedList
+{
+
+public :
+
+    void insert(Person data) {
+        if (head == nullptr) {
+            head = new Node(&data);
+        } else {
+            Node* temp = new Node(&data);
+            temp -> setNext(head);
+            head = temp;
+        }; //if
+    }; //insert
+
+}; //UnsortedLinkedList
+
+
+
+
+
+
+
+class SortedLinkedList: public LinkedList
+{
+
+public:
+    void insert(Person personToInsert) {
+        Node* newNode = new Node(&personToInsert);
+        if (isEmpty()) {
+            head = newNode;
+        } else if (personToInsert.compareTo(head -> getData()) < 0) {
+            newNode -> setNext(head);
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp -> getNext() != nullptr) {
+                Person tempPerson = (temp -> getNext()) -> getData();
+                if (personToInsert.compareTo(tempPerson) < 0) {
+                    newNode -> setNext(temp -> getNext());
+                    temp -> setNext(newNode);
+                    return;
+                } else {
+                    temp = temp -> getNext();
+                }; //if
+            }; //while
+
+
+            //This will be reached if the person needs to be inserted at the end of
+            //the list
+            if (personToInsert.compareTo(temp -> getData()) > 0) {
+                newNode -> setNext(temp -> getNext());
+                temp -> setNext(newNode);
+            } else {
+                temp -> setNext(newNode);
+            } //if
+        }; //if
+    }; //insert
+
+}; //SortedLinkedList
